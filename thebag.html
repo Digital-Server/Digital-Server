@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winkelwagen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #000428, #004e92);
+            margin: 0;
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px; 
+            width: 100%;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            margin-bottom: 40px;
+            font-weight: 600;
+            font-size: 2em;
+        }
+        .cart-items {
+            margin-top: 20px;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item h4, .cart-item h6 {
+            margin: 0;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .quantity-control button:hover {
+            background-color: #0056b3;
+        }
+        .quantity-control button:focus {
+            outline: none;
+        }
+        .remove-item {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .remove-item:hover {
+            background-color: #c82333;
+        }
+        .remove-item:focus {
+            outline: none;
+        }
+        .total-price {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.5em;
+        }
+        .checkout-button {
+            margin-top: 20px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .checkout-button:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            color: #ff0000;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Winkelwagen</h1>
+        <div class="cart-items" id="cart-items">
+            <!-- Winkelwagenitems worden hier dynamisch toegevoegd -->
+        </div>
+        <div class="total-price" id="total-price">
+            Totaal: €0,00
+        </div>
+        <a id="checkout-button" class="checkout-button" href="#">Afrekenen</a>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            const checkoutButton = document.getElementById('checkout-button');
+            const errorMessageElement = document.getElementById('error-message');
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+            function updateCart() {
+                cartItemsContainer.innerHTML = '';
+                let total = 0;
+
+                if (cartItems.length === 0) {
+                    cartItemsContainer.innerHTML = '<p>Geen producten in de winkelwagen.</p>';
+                    totalPriceElement.textContent = 'Totaal: €0,00';
+                } else { 
+                    cartItems.forEach((item, index) => {
+                        const itemElement = document.createElement('div');
+                        itemElement.classList.add('cart-item');
+                        itemElement.innerHTML = `
+                            <div>
+                                <h4>${item.name}</h4>
+                                <h6>Prijs: €${(item.price * item.quantity).toFixed(2)}</h6>
+                            </div>
+                            <div class="quantity-control">
+                                <span>${item.quantity}</span>
+                            </div>
+                            <button class="remove-item" data-index="${index}">Verwijder</button>
+                        `;
+                        cartItemsContainer.appendChild(itemElement);
+                        total += item.price * item.quantity;
+                    });
+                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`;
+                    updateCheckoutLink(total);
+                }
+
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            }
+
+            function updateCheckoutLink(total) {
+                let checkoutUrl = 'https://buy.stripe.com/28o17gbTQfMS9Ta9AA';
+                if (total === 6.99) {
+                    checkoutUrl = 'https://buy.stripe.com/28o17gbTQfMS9Ta9AA';
+                } else if (total === 12.99) {
+                    checkoutUrl = 'https://buy.stripe.com/28o4jsga69ou7L2289';
+                } else if (total === 18.99) {
+                    checkoutUrl = 'https://buy.stripe.com/3csdU28HE3060iAcMO';
+				} else if (total === 14.99) {
+                    checkoutUrl = 'https://buy.stripe.com/cN2eY62jg1W2aXe8wz';
+				} else if (total === 28.99) {
+                    checkoutUrl = 'https://buy.stripe.com/eVa9DM9LI1W26GY6os';
+				} else if (total === 55.99) {
+                    checkoutUrl = 'https://buy.stripe.com/4gwcPY6zwcAG9Ta6ot';
+				} else if (total === 4.49) {
+                    checkoutUrl = 'https://buy.stripe.com/9AQ17gga60RY2qI7sy';
+				} else if (total === 7.99) {
+                    checkoutUrl = 'https://buy.stripe.com/aEU2bk9LI0RY5CU3cj';
+				} else if (total === 14.95) {
+                    checkoutUrl = 'https://buy.stripe.com/6oE2bk3nk8kq8P6fZ6';
+				} else if (total === 19.98) {
+                    checkoutUrl = 'https://buy.stripe.com/4gw5nwaPM58eghyfZ7';
+				} else if (total === 25.98) {
+                    checkoutUrl = 'https://buy.stripe.com/bIY7vEcXUasy9TabIS';
+				} else if (total === 21.98) {
+                    checkoutUrl = 'https://buy.stripe.com/00g17g0b8eIO9Ta7sD';
+				} else if (total === 35.98) {
+                    checkoutUrl = 'https://buy.stripe.com/cN2g2acXU0RYd5mfZa';
+				} else if (total === 62.98) {
+                    checkoutUrl = 'https://buy.stripe.com/bIYaHQe1Y6ci5CU7sF';
+				} else if (total === 11.48) {
+                    checkoutUrl = 'https://buy.stripe.com/5kAbLUaPM1W27L24gu';
+				} else if (total === 14.98) {
+                    checkoutUrl = 'https://buy.stripe.com/6oE5nwaPMgQWfdu14j';
+				} else if (total === 21.94) {
+                    checkoutUrl = 'https://buy.stripe.com/28o6rA9LI7gm5CUbIY';
+				} else if (total === 31.98) {
+                    checkoutUrl = 'https://buy.stripe.com/bIY3foaPMbwCghy4gx';
+				} else if (total === 27.98) {
+                    checkoutUrl = 'https://buy.stripe.com/28o8zI2jgfMS5CUdR8';
+				} else if (total === 41.98) {
+                    checkoutUrl = 'https://buy.stripe.com/cN2bLU2jgdEK7L28wP';
+				} else if (total === 68.98) {
+                    checkoutUrl = 'https://buy.stripe.com/cN2bLU2jgdEK7L28wP';
+				} else if (total === 17.48) {
+                    checkoutUrl = 'https://buy.stripe.com/eVaaHQ7DAeIO7L2dRb';
+				} else if (total === 20.98) {
+                    checkoutUrl = 'https://buy.stripe.com/00g6rA0b81W2ghyeVg';
+				} else if (total === 27.94) {
+                    checkoutUrl = 'https://buy.stripe.com/eVa6rA5vsfMSe9q6oL';
+				} else if (total === 33.98) {
+                    checkoutUrl = 'https://buy.stripe.com/6oEdU23nk6ci8P600o';
+				} else if (total === 47.98) {
+                    checkoutUrl = 'https://buy.stripe.com/9AQdU2aPMcAG7L2aF3';
+				} else if (total === 74.98) {
+                    checkoutUrl = 'https://buy.stripe.com/5kAdU26zwdEK6GYeVk';
+				} else if (total === 23.48) {
+                    checkoutUrl = 'https://buy.stripe.com/cN27vEbTQfMS3uM6oP';
+				} else if (total === 26.98) {
+                    checkoutUrl = 'https://buy.stripe.com/eVa03c9LI7gmghy6oQ';
+				} else if (total === 33.94) {
+                    checkoutUrl = 'https://buy.stripe.com/9AQeY66zw8kq7L27sV';
+				} else if (total === 43.98) {
+                    checkoutUrl = 'https://buy.stripe.com/cN25nw6zw58e5CUaF8';
+				} else if (total === 70.98) {
+                    checkoutUrl = 'https://buy.stripe.com/9AQeY6e1YfMSghy5kP';
+				} else if (total === 19.48) {
+                    checkoutUrl = 'https://buy.stripe.com/dR65nw8HE1W2e9qaFa';
+				} else if (total === 22.98) {
+                    checkoutUrl = 'https://buy.stripe.com/6oEcPYcXU7gmd5m6oV';
+				} else if (total === 29.98) {
+                    checkoutUrl = 'https://buy.stripe.com/eVaeY6f62306c1ibJg';
+				
+                }
+                checkoutButton.href = checkoutUrl;
+            }
+
+            cartItemsContainer.addEventListener('click', function(event) {
+                const target = event.target;
+                const index = parseInt(target.dataset.index);
+
+                if (target.classList.contains('remove-item')) {
+                    cartItems.splice(index, 1);
+                    updateCart();
+                }
+            });
+
+            function addToCart(product) {
+                const existingProduct = cartItems.find(item => item.name === product.name);
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    if (cartItems.length >= 3) {
+                        errorMessageElement.textContent = 'Je kunt maximaal 3 verschillende producten toevoegen.';
+                        return;
+                    }
+                    cartItems.push({ ...product, quantity: 1 });
+                }
+                errorMessageElement.textContent = '';
+                updateCart();
+            }
+
+            // Voor testdoeleinden: voeg producten toe door op de console te roepen:
+            // addToCart({ name: 'Product Naam', price: 10.00 });
+            window.addToCart = addToCart;
+
+            updateCart();
+        });
+    </script>
+</body>
+</html>
