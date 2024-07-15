@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -141,17 +142,10 @@
                     cartItems.forEach((item, index) => {
                         const itemElement = document.createElement('div');
                         itemElement.classList.add('cart-item');
-
-                        // Controleer op specifieke itemnaam en pas de prijs aan
-                        if (item.name === "Minecraft 4GB") {
-                            item.price = 4.49;
-                        }
-
-                        const itemTotal = (item.price * item.quantity).toFixed(2); // Zorgt voor twee decimalen
                         itemElement.innerHTML = `
                             <div>
                                 <h4>${item.name}</h4>
-                                <h6>Prijs: €${itemTotal}</h6>
+                                <h6>Prijs: €${(item.price * item.quantity).toFixed(2)}</h6>
                             </div>
                             <div class="quantity-control">
                                 <span>${item.quantity}</span>
@@ -159,9 +153,9 @@
                             <button class="remove-item" data-index="${index}">Verwijder</button>
                         `;
                         cartItemsContainer.appendChild(itemElement);
-                        total += parseFloat(itemTotal);
+                        total += parseFloat(item.price) * item.quantity;
                     });
-                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`; // Zorgt voor twee decimalen
+                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`;
                     updateCheckoutLink(total);
                 }
 
@@ -203,22 +197,85 @@
                 } else if (total === 27.94) {
                     checkoutUrl = 'https://buy.stripe.com/3cs7vEe1Y8kqd5m7uB';
                 } else if (total === 33.98) {
-                    checkoutUrl = 'https://buy.stripe.com/bIY8vEe1Y7x19TadS0';
+                    checkoutUrl = 'https://buy.stripe.com/bIYg2a8HEbwCghy4iq';
+                } else if (total === 47.98) {
+                    checkoutUrl = 'https://buy.stripe.com/5kAdU2ga68kq2qI5mv';
+                } else if (total === 74.98) {
+                    checkoutUrl = 'https://buy.stripe.com/3csaHQe1YfMS9TadT2';
+                } else if (total === 23.48) {
+                    checkoutUrl = 'https://buy.stripe.com/dR6eY63nkcAG0iA5mx';
+                } else if (total === 26.98) {
+                    checkoutUrl = 'https://buy.stripe.com/6oE3foe1YeIOaXe2am';
+                } else if (total === 33.94) {
+                    checkoutUrl = 'https://buy.stripe.com/4gwg2a8HE3061mE2an';
+                } else if (total === 43.98) {
+                    checkoutUrl = 'https://buy.stripe.com/cN29DMe1Yasyd5mbKY';
+                } else if (total === 70.98) {
+                    checkoutUrl = 'https://buy.stripe.com/4gw7vEbTQcAGghy9CR';
+                } else if (total === 19.48) {
+                    checkoutUrl = 'https://buy.stripe.com/4gw17g7DAgQW1mEg1g';
+                } else if (total === 22.98) {
+                    checkoutUrl = 'https://buy.stripe.com/8wM3fo4ro7gmc1i9CT';
+                } else if (total === 29.94) {
+                    checkoutUrl = 'https://buy.stripe.com/6oEg2a9LI0RYfdu9CU';
+                } else if (total === 84.98) {
+                    checkoutUrl = 'https://buy.stripe.com/bIY2bkcXU8kqe9q2at';
+                } else if (total === 33.48) {
+                    checkoutUrl = 'https://buy.stripe.com/7sIg2a6zw58e1mE5mG';
+                } else if (total === 36.98) {
+                    checkoutUrl = 'https://buy.stripe.com/00g7vEcXU0RYfdu4iD';
+                } else if (total === 43.94) {
+                    checkoutUrl = 'https://buy.stripe.com/cN29DMf62asyd5m8yU';
+                } else if (total === 60.48) {
+                    checkoutUrl = 'https://buy.stripe.com/fZe4js6zw1W2fdu16t';
+                } else if (total === 63.98) {
+                    checkoutUrl = 'https://buy.stripe.com/7sIaHQ9LI9ou9Tag1o';
+                } else if (total === 70.94) {
+                    checkoutUrl = 'https://buy.stripe.com/3csaHQf62asy7L2cPd';
+                } else if (total === 12.48) {
+                    checkoutUrl = 'https://buy.stripe.com/6oEeY63nkeIO3uMbLa';
+                } else if (total === 19.44) {
+                    checkoutUrl = 'https://buy.stripe.com/00g9DMf6244a2qIdTj';
+                } else if (total === 22.94) {
+                    checkoutUrl = 'https://buy.stripe.com/cN2aHQ6zwfMS4yQeXo';
                 }
 
+                
                 checkoutButton.href = checkoutUrl;
             }
 
             cartItemsContainer.addEventListener('click', function(event) {
-                if (event.target.classList.contains('remove-item')) {
-                    const index = event.target.getAttribute('data-index');
+                const target = event.target;
+                const index = parseInt(target.dataset.index);
+
+                if (target.classList.contains('remove-item')) {
                     cartItems.splice(index, 1);
                     updateCart();
                 }
             });
+
+            function addToCart(product) {
+                const existingProduct = cartItems.find(item => item.name === product.name);
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    if (cartItems.length >= 3) {
+                        errorMessageElement.textContent = 'Je kunt maximaal 3 verschillende producten toevoegen.';
+                        return;
+                    }
+                    cartItems.push({ ...product, quantity: 1 });
+                }
+                errorMessageElement.textContent = '';
+                updateCart();
+            }
+
+            // Voor testdoeleinden: voeg producten toe door op de console te roepen:
+            // addToCart({ name: 'Product Naam', price: 10.00 });
+            window.addToCart = addToCart;
 
             updateCart();
         });
     </script>
 </body>
 </html>
+
