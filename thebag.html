@@ -145,7 +145,7 @@
                         itemElement.innerHTML = `
                             <div>
                                 <h4>${item.name}</h4>
-                                <h6>Prijs: €${(item.price * item.quantity).toFixed(2)}</h6>
+                                <h6>Prijs: €${(item.price * item.quantity).math.floor(2)}</h6>
                             </div>
                             <div class="quantity-control">
                                 <span>${item.quantity}</span>
