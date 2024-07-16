@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car</title>
+    <title>Cart</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -147,12 +147,13 @@
                         } else if (item.name === 'Minecraft 16GB') {
                             itemPrice += 0.95;
                         }
-            const itemElement = document.createElement('div');
+                        
+                        const itemElement = document.createElement('div');
                         itemElement.classList.add('cart-item');
                         itemElement.innerHTML = `
                             <div>
                                 <h4>${item.name}</h4>
-                                <h6>Prijs: €${(itemPrice * item.quantity)}</h6>
+                                <h6>Prijs: €${(itemPrice * item.quantity).toFixed(2)}</h6>
                             </div>
                             <div class="quantity-control">
                                 <span>${item.quantity}</span>
@@ -162,9 +163,8 @@
                         cartItemsContainer.appendChild(itemElement);
                         total += itemPrice * item.quantity;
                     });
-                    totalPriceElement.textContent = `Totaal: €${total}`;
-                    updateCheckoutLink(total);            
-                        
+                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`;
+                    updateCheckoutLink(total);
                 }
 
                 localStorage.setItem('cartItems', JSON.stringify(cartItems));
