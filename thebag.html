@@ -148,23 +148,7 @@
                             itemPrice += 0.95;
                         }
                         
-                        const itemElement = document.createElement('div');
-                        itemElement.classList.add('cart-item');
-                        itemElement.innerHTML = `
-                            <div>
-                                <h4>${item.name}</h4>
-                                <h6>Prijs: €${(itemPrice * item.quantity).toFixed(2)}</h6>
-                            </div>
-                            <div class="quantity-control">
-                                <span>${item.quantity}</span>
-                            </div>
-                            <button class="remove-item" data-index="${index}">Verwijder</button>
-                        `;
-                        cartItemsContainer.appendChild(itemElement);
-                        total += itemPrice * item.quantity;
-                    });
-                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`;
-                    updateCheckoutLink(total);
+                        
                 }
 
                 localStorage.setItem('cartItems', JSON.stringify(cartItems));
