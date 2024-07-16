@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>winkelwagen</title>
+    <title>cart</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -177,8 +177,12 @@
             }
 
             function updateCheckoutLink(total) {
-                let checkoutUrl = 'https://buy.stripe.com/28o17gbTQfMS9Ta9AA';
-                // Voeg hier de juiste URLs toe voor elke prijs
+                let checkoutUrl = '#';
+                if (total === 6.99) {
+                    checkoutUrl = 'https://buy.stripe.com/aEUcPY7DAdEK6GYdTl';
+                } else {
+                    // Voeg hier de juiste URLs toe voor andere totaalbedragen
+                }
                 checkoutButton.href = checkoutUrl;
             }
 
@@ -216,3 +220,4 @@
     </script>
 </body>
 </html>
+
