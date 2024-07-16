@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winkelwagen</title>
+    <title>cart</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -130,30 +130,36 @@
             const errorMessageElement = document.getElementById('error-message');
             let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
+            const productPrices = {
+                "FX Server 4GB RAM": 6.99,
+                "FX Server 8GB RAM": 12.99,
+                "FX Server 16 GB RAM": 18.99,
+                "VPS 16GB RAM": 14.99,
+                "VPS 32GB RAM": 28.99,
+                "VPS 64GB RAM": 55.99,
+                "Minecraft 4GB RAM": 4.49,
+                "Minecraft 8GB RAM": 7.99,
+                "Minecraft 16GB RAM": 14.95
+            };
+
             function updateCart() {
                 cartItemsContainer.innerHTML = '';
-                let totalCents = 0;
+                let total = 0;
 
                 if (cartItems.length === 0) {
                     cartItemsContainer.innerHTML = '<p>Geen producten in de winkelwagen.</p>';
                     totalPriceElement.textContent = 'Totaal: €0,00';
-                } else { 
+                } else {
                     cartItems.forEach((item, index) => {
-                        let itemPriceCents = item.priceCents;
-                        if (item.name === 'Minecraft 4GB') {
-                            itemPriceCents += 49;
-                        } else if (item.name === 'Minecraft 8GB') {
-                            itemPriceCents += 99;
-                        } else if (item.name === 'Minecraft 16GB') {
-                            itemPriceCents += 95;
-                        }
+                        const itemPrice = productPrices[item.name];
+                        const itemTotal = itemPrice * item.quantity;
                         
                         const itemElement = document.createElement('div');
                         itemElement.classList.add('cart-item');
                         itemElement.innerHTML = `
                             <div>
                                 <h4>${item.name}</h4>
-                                <h6>Prijs: €${(itemPriceCents * item.quantity / 100).toFixed(2)}</h6>
+                                <h6>Prijs: €${itemTotal.toFixed(2)}</h6>
                             </div>
                             <div class="quantity-control">
                                 <span>${item.quantity}</span>
@@ -161,10 +167,10 @@
                             <button class="remove-item" data-index="${index}">Verwijder</button>
                         `;
                         cartItemsContainer.appendChild(itemElement);
-                        totalCents += itemPriceCents * item.quantity;
+                        total += itemTotal;
                     });
-                    totalPriceElement.textContent = `Totaal: €${(totalCents / 100).toFixed(2)}`;
-                    updateCheckoutLink(totalCents / 100);
+                    totalPriceElement.textContent = `Totaal: €${total.toFixed(2)}`;
+                    updateCheckoutLink(total);
                 }
 
                 localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -172,9 +178,7 @@
 
             function updateCheckoutLink(total) {
                 let checkoutUrl = 'https://buy.stripe.com/28o17gbTQfMS9Ta9AA';
-                // Dezelfde logica als eerder voor het instellen van de checkout link
-                // Afhankelijk van de totaalprijs in euro's.
-                
+                // Voeg hier de juiste URLs toe voor elke prijs
                 checkoutButton.href = checkoutUrl;
             }
 
@@ -204,7 +208,7 @@
             }
 
             // Voor testdoeleinden: voeg producten toe door op de console te roepen:
-            // addToCart({ name: 'Product Naam', priceCents: 799 }); // Voor €7.99
+            // addToCart({ name: 'Product Naam', price: 10.00 });
             window.addToCart = addToCart;
 
             updateCart();
