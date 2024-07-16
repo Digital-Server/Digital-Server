@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ez</title>
+    <title>ezzzzz</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -135,7 +133,7 @@
             const productPrices = {
                 "FX Server 4GB RAM": 6.99,
                 "FX Server 8GB RAM": 12.99,
-                "FX Server 16 GB RAM": 18.99,
+                "FX Server 16GB RAM": 18.99, // aangepast naar 16GB RAM
                 "VPS 16GB RAM": 14.99,
                 "VPS 32GB RAM": 28.99,
                 "VPS 64GB RAM": 55.99,
@@ -154,7 +152,10 @@
                 } else {
                     cartItems.forEach((item, index) => {
                         const itemPrice = productPrices[item.name];
-                        const itemTotal = itemPrice * item.quantity;
+                        if (itemPrice === undefined) {
+                            console.error(`Prijs niet gevonden voor ${item.name}`);
+                        }
+                        const itemTotal = (itemPrice || 0) * item.quantity;
                         
                         const itemElement = document.createElement('div');
                         itemElement.classList.add('cart-item');
@@ -226,13 +227,9 @@
                     4.49: 'https://buy.stripe.com/dR617g6zw7gm2qIcPn',
                     7.99: 'https://buy.stripe.com/14kaHQ1fc306aXe8z8',
                     14.95: 'https://buy.stripe.com/7sIaHQ2jg9ou5CUaHh',
-                    
                 };
 
-                if (urlMapping[total.toFixed(2)]) {
-                    checkoutUrl = urlMapping[total.toFixed(2)];
-                }
-
+                checkoutUrl = urlMapping[total.toFixed(2)] || '#';
                 checkoutButton.href = checkoutUrl;
             }
 
