@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cart</title>
+    <title>mz</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -179,11 +178,50 @@
 
             function updateCheckoutLink(total) {
                 let checkoutUrl = '#';
-                if (total === 6.99) {
-                    checkoutUrl = 'https://buy.stripe.com/aEUcPY7DAdEK6GYdTl';
-                } else {
-                    // Voeg hier de juiste URLs toe voor andere totaalbedragen
+                const urlMapping = {
+                    6.99: 'https://buy.stripe.com/aEUcPY7DAdEK6GYdTl',
+                    19.98: 'https://buy.stripe.com/dR64jsga644aghy01V',
+                    25.98: 'https://buy.stripe.com/14k4js9LI44ae9q01W',
+                    21.98: 'https://buy.stripe.com/8wM7vEf62bwC9Ta01X',
+                    35.98: 'https://buy.stripe.com/00gg2a7DA6ci0iAeWS',
+                    62.98: 'https://buy.stripe.com/cN22bk0b88kq6GYeWT',
+                    11.48: 'https://buy.stripe.com/dR6g2acXU9ou4yQ2a8',
+                    14.98: 'https://buy.stripe.com/fZe4js3nk1W29TaeWV',
+                    21.94: 'https://buy.stripe.com/14k6rA4ro9ou6GYg10',
+                    31.98: 'https://buy.stripe.com/fZe03c1fc8kqfdu4ij',
+                    27.98: 'https://buy.stripe.com/cN22bk6zw3069TabKM',
+                    41.98: 'https://buy.stripe.com/aEU8zIaPMfMS7L23eh',
+                    68.98: 'https://buy.stripe.com/cN26rA7DA9ou2qIeX0',
+                    17.48: 'https://buy.stripe.com/8wM5nwaPM8kq1mEbKP',
+                    20.98: 'https://buy.stripe.com/aEU7vEf6244a9TadSY',
+                    27.94: 'https://buy.stripe.com/3cs7vEe1Y8kqd5m7uB',
+                    33.98: 'https://buy.stripe.com/bIYg2a8HEbwCghy4iq',
+                    47.98: 'https://buy.stripe.com/5kAdU2ga68kq2qI5mv',
+                    74.98: 'https://buy.stripe.com/3csaHQe1YfMS9TadT2',
+                    23.48: 'https://buy.stripe.com/dR6eY63nkcAG0iA5mx',
+                    26.98: 'https://buy.stripe.com/6oE3foe1YeIOaXe2am',
+                    33.94: 'https://buy.stripe.com/4gwg2a8HE3061mE2an',
+                    43.98: 'https://buy.stripe.com/cN2bLU7DA0RYd5mbKY',
+                    70.98: 'https://buy.stripe.com/4gw7vEbTQcAGghy9CR',
+                    19.48: 'https://buy.stripe.com/4gw17g7DAgQW1mEg1g',
+                    22.98: 'https://buy.stripe.com/8wM3fo4ro7gmc1i9CT',
+                    29.94: 'https://buy.stripe.com/6oEg2a9LI0RYfdu9CU',
+                    84.98: 'https://buy.stripe.com/bIY2bkcXU8kqe9q2at',
+                    33.48: 'https://buy.stripe.com/7sIg2a6zw58e1mE5mG',
+                    36.98: 'https://buy.stripe.com/00g7vEcXU0RYfdu4iD',
+                    43.94: 'https://buy.stripe.com/cN29DMe1Yasyd5m8yU',
+                    60.48: 'https://buy.stripe.com/fZe4js6zw1W2fdu16t',
+                    63.98: 'https://buy.stripe.com/7sIaHQ9LI9ou9Tag1o',
+                    70.94: 'https://buy.stripe.com/3csaHQf62asy7L2cPd',
+                    12.48: 'https://buy.stripe.com/6oEeY63nkeIO3uMbLa',
+                    19.44: 'https://buy.stripe.com/00g9DMf6244a2qIdTj',
+                    22.94: 'https://buy.stripe.com/cN2aHQ6zwfMS4yQeXo',
+                };
+
+                if (urlMapping[total.toFixed(2)]) {
+                    checkoutUrl = urlMapping[total.toFixed(2)];
                 }
+
                 checkoutButton.href = checkoutUrl;
             }
 
@@ -221,4 +259,3 @@
     </script>
 </body>
 </html>
-
