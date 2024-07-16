@@ -153,7 +153,7 @@
                         itemElement.innerHTML = `
                             <div>
                                 <h4>${item.name}</h4>
-                                <h6>Prijs: €${(itemPrice * item.quantity).fourFixed(4)}</h6>
+                                <h6>Prijs: €${(itemPrice * item.quantity).toFixed(4)}</h6>
                             </div>
                             <div class="quantity-control">
                                 <span>${item.quantity}</span>
@@ -163,7 +163,7 @@
                         cartItemsContainer.appendChild(itemElement);
                         total += itemPrice * item.quantity;
                     });
-                    totalPriceElement.textContent = `Totaal: €${total.fourFixed(4)}`;
+                    totalPriceElement.textContent = `Totaal: €${total.toFixed(4)}`;
                     updateCheckoutLink(total);
                 }
 
