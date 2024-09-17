@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klant Boodschappenlijst</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUXFx0XFRUXGBgdFxcXFRcZFxUXFRUYHSggGB0lHRcXITEhJSkrLi4uFx8zODMtNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIALcBEwMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAABAAIHA//EACQQAQEBAAIBAwQDAQAAAAAAAAABEQLwoTGRsSFBYYESceFR/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AOMytShQDUkAhihAY0rACxGwUFURQSKAYMaWABhQM4mhgJVYaDOGQyoApCgEVSAIoAy0ACKAYjhBQwyCAijgBYZFZ32AVoEBJ6qGd9h9wFhSBVWJArA0AGKlAzSRQWKpAEsMAI4ICPJYAQUigGhclIDOKGmAwjhBrjWhxMAbSKQWnlO+yxcu+AZhz5UPfkFBvf2YAMqiUAVUq+gCrCAQpqAKlAzGqsQAhoGZUYrACVQIGqAKI1gBlqA/oGUrqB64IbFIDNagwSA1p0LARvfIVBKqU532AL7q0gF3wou+AQxqgFiiioIWGq0BYrDQANDQCqmqgMBioKwY0v8AgM4ktARWKHAGJqcQDaQlAU0U0A3P7ZxoGeRV+vf7AI3vgYoBShAQNMgkaO+AWI1YAqqVoDDfVIAaMUA2JIAqogRlBgBckqASi+n5BIxA0CoAWhrfyAtMQA4KuJoDPwrFO+VQRSA/rv0ZqlPIFe+474Ng78ge+RYagC0gBFKVAQkIAhRAqYLe+6oKLV34QBqRmUwAQoCSwA0REBnqsXFQDgRoIchxNA9+R34UqA2IG98AJ6GpUBp78j7G99gVQz6oCqoAWA0Aje+Ure/oEO/DTIEGgEgcAVVUgFCIAsRqAwsxoEolP0DNrbMIIatNARcVFgHl32PfMZhl77AUIYCtSvfIAqIAWbTYu/AD+SUXfgDqoitBb33VNAKmKqALCFAVXJADAgC1LUB4qUcb9P8Af8MoHjTrMIKGCRaCVqQIW99lKqDU9UPuQEI0gRqQKJIEJ3wRAX3VV74VgGK98KLvwC0JUFaqqtAEWq0DWSNAhQUFSKQXH0ajEMoLiRxIELiNAnRb39ADq5URaDXGoKgaeVZtVBqCVQQDUquQKAgDUBQailEq0EktA0RCA0KFaC1aN77oDAhoNVCkBKZWWgWllAYKogNqgQFUGgotSAhICtABrvyrQqBoVQKpWigVqQJURUCDACpoWgohqtBA6yDeoagDVKBlFApRKkB1RIEqkCKQBFAmf5FAl35SBWilADUgVSQC01IFBSgGq1IAtSA7+RqQHe/RJA//2Q==') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparante overlay */
+            z-index: 1000; /* Zorg ervoor dat de login overlay bovenop ligt */
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .login-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+
+        .login-form h2 {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .login-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-form button {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .login-form button:hover {
+            background-color: #c0392b;
+        }
+
+        .header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 500; /* Zorg ervoor dat de header boven de tabel en klantsecties ligt */
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header button {
+            background-color: #e74c3c;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header button:hover {
+            background-color: #c0392b;
+        }
+
+        .customer-list {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .customer {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparante zwarte achtergrond voor klantsecties */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: relative; /* Zorgt ervoor dat de z-index werkt binnen klantsecties */
+            z-index: 200; /* Zorg ervoor dat klantsecties boven de achtergrond maar onder de header staan */
+        }
+
+        .customer h2 {
+            margin: 0;
+            color: #e74c3c;
+            font-size: 20px;
+        }
+
+        .customer button {
+            background-color: #e74c3c;
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .customer button:hover {
+            background-color: #c0392b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparante achtergrond voor de tabel */
+            position: relative; /* Zorgt ervoor dat de z-index werkt binnen tabelsecties */
+            z-index: 100; /* Zorg ervoor dat de tabel boven de klantsecties komt */
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        td {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparante achtergrond voor cellen */
+            color: #fff; /* Witte tekst in cellen voor betere zichtbaarheid */
+        }
+
+        td button {
+            background-color: #e74c3c;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        td button:hover {
+            background-color: #c0392b;
+        }
+
+        .quantity-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quantity-control button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .quantity-control button:hover {
+            background-color: #c0392b;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            font-size: 16px;
+            background-color: #000; /* Achtergrondkleur voor de totaal sectie */
+            color: #fff; /* Witte tekst voor de totaal sectie */
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            position: relative; /* Zorgt ervoor dat de z-index werkt binnen totaal secties */
+            z-index: 100; /* Zorg ervoor dat de totaal sectie boven de klantsecties en tabel staat */
+        }
+
+        .total-section p {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Login Form -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-form">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Gebruikersnaam">
+            <input type="password" id="password" placeholder="Wachtwoord">
+            <button onclick="login()">Inloggen</button>
+            <p id="loginError" style="color: red; display: none;">Ongeldige login!</p>
+        </div>
+    </div>
+
+    <!-- Bovenste balk -->
+    <div class="header" style="display:none;" id="mainContent">
+        <h1>Boodschappenlijst per Klant</h1>
+        <div>
+            <button onclick="addCustomer()">+ Voeg Klant Toe</button>
+            <button onclick="deleteAllCustomers()">Verwijder Alle Klanten</button>
+        </div>
+    </div>
+
+    <!-- Container voor klanten -->
+    <div class="customer-list" id="customerList">
+        <!-- Hier worden klanten dynamisch toegevoegd -->
+    </div>
+
+    <script>
+        // Dummy login gegevens
+        const correctUsername = "Bram Dijkstra";
+        const correctPassword = "stfu321";
+
+        if (localStorage.getItem("loggedIn") === "true") {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+            loadCustomers();
+        } else {
+            document.getElementById('loginContainer').style.display = 'flex';
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === correctUsername && password === correctPassword) {
+                localStorage.setItem("loggedIn", "true");
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'flex';
+                loadCustomers(); // Laad opgeslagen klanten
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        window.onbeforeunload = function() {
+            localStorage.setItem("loggedIn", "false");
+        };
+
+        let customerCount = 0;
+
+        function addCustomer() {
+            const customerName = prompt("Voer de naam van de klant in:");
+            if (!customerName) return;
+
+            customerCount++;
+            const customerDiv = document.createElement('div');
+            customerDiv.className = 'customer';
+            customerDiv.setAttribute('id', `customer-${customerCount}`);
+
+            customerDiv.innerHTML = `
+                <h2>${customerName}</h2>
+                <button onclick="addItem(${customerCount})">+ Voeg Product Toe</button>
+                <button onclick="deleteCustomer(${customerCount})">Verwijder Klant</button>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Aantal</th>
+                                <th>Verkoopprijs</th>
+                                <th>Inkoopprijs</th>
+                                <th>Winst</th>
+                                <th>Acties</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable-${customerCount}">
+                            <!-- Producten worden hier toegevoegd -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="total-section">
+                    <p id="totalPrice-${customerCount}">Totaal Verkoopprijs: € 0.00</p>
+                    <p id="totalPurchasePrice-${customerCount}">Totaal Inkoopprijs: € 0.00</p>
+                    <p id="totalProfit-${customerCount}">Totaal Winst: € 0.00</p>
+                </div>
+            `;
+
+            document.getElementById('customerList').appendChild(customerDiv);
+            saveCustomers();
+        }
+
+        function addItem(customerId) {
+            const productName = prompt("Productnaam:");
+            const purchasePrice = parseFloat(prompt("Inkoopprijs (€) per stuk:"));
+
+            if (!productName || isNaN(purchasePrice)) {
+                alert("Vul alle velden correct in.");
+                return;
+            }
+
+            const sellPrice = purchasePrice * 1.2;
+            const profit = sellPrice - purchasePrice;
+
+            const tableBody = document.getElementById(`customerTable-${customerId}`);
+            const row = document.createElement('tr');
+            const productId = new Date().getTime();
+
+            row.setAttribute('id', `product-${productId}`);
+
+            row.innerHTML = `
+                <td>${productName}</td>
+                <td class="quantity-control">
+                    <button onclick="decreaseQuantity(${productId}, ${customerId}, ${purchasePrice}, ${sellPrice}, ${profit})">-</button>
+                    <span id="quantity-${productId}">1</span>
+                    <button onclick="increaseQuantity(${productId}, ${customerId}, ${purchasePrice}, ${sellPrice}, ${profit})">+</button>
+                </td>
+                <td id="sellPrice-${productId}">${sellPrice.toFixed(2)}</td>
+                <td id="purchasePrice-${productId}">${purchasePrice.toFixed(2)}</td>
+                <td id="profit-${productId}">${profit.toFixed(2)}</td>
+                <td><button onclick="deleteProduct(${productId}, ${customerId}, ${sellPrice}, ${profit})">Verwijder</button></td>
+            `;
+
+            tableBody.appendChild(row);
+
+            updateTotals(customerId, sellPrice, profit, purchasePrice);
+            saveCustomers();
+        }
+
+        function increaseQuantity(productId, customerId, purchasePrice, sellPrice, profit) {
+            const quantityElement = document.getElementById(`quantity-${productId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            quantity++;
+            quantityElement.textContent = quantity;
+
+            updateTotals(customerId, sellPrice, profit, purchasePrice);
+            saveCustomers();
+        }
+
+        function decreaseQuantity(productId, customerId, purchasePrice, sellPrice, profit) {
+            const quantityElement = document.getElementById(`quantity-${productId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            if (quantity > 1) {
+                quantity--;
+                quantityElement.textContent = quantity;
+
+                updateTotals(customerId, -sellPrice, -profit, -purchasePrice);
+                saveCustomers();
+            }
+        }
+
+        function deleteProduct(productId, customerId, sellPrice, profit) {
+            document.getElementById(`product-${productId}`).remove();
+            updateTotals(customerId, -sellPrice, -profit, -sellPrice / 1.2);
+            saveCustomers();
+        }
+
+        function deleteCustomer(customerId) {
+            const confirmation = confirm("Weet je zeker dat je deze klant wilt verwijderen?");
+            if (confirmation) {
+                document.getElementById(`customer-${customerId}`).remove();
+                saveCustomers();
+            }
+        }
+
+        function deleteAllCustomers() {
+            const confirmation = confirm("Weet je zeker dat je alle klanten wilt verwijderen?");
+            if (confirmation) {
+                document.getElementById('customerList').innerHTML = '';
+                saveCustomers();
+            }
+        }
+
+        function updateTotals(customerId, sellPriceChange, profitChange, purchasePriceChange) {
+            const totalPriceElement = document.getElementById(`totalPrice-${customerId}`);
+            const totalProfitElement = document.getElementById(`totalProfit-${customerId}`);
+            const totalPurchasePriceElement = document.getElementById(`totalPurchasePrice-${customerId}`);
+
+            let currentTotalPrice = parseFloat(totalPriceElement.textContent.replace('Totaal Verkoopprijs: € ', ''));
+            let currentTotalProfit = parseFloat(totalProfitElement.textContent.replace('Totaal Winst: € ', ''));
+            let currentTotalPurchasePrice = parseFloat(totalPurchasePriceElement.textContent.replace('Totaal Inkoopprijs: € ', ''));
+
+            currentTotalPrice += sellPriceChange;
+            currentTotalProfit += profitChange;
+            currentTotalPurchasePrice += purchasePriceChange;
+
+            totalPriceElement.textContent = `Totaal Verkoopprijs: € ${currentTotalPrice.toFixed(2)}`;
+            totalProfitElement.textContent = `Totaal Winst: € ${currentTotalProfit.toFixed(2)}`;
+            totalPurchasePriceElement.textContent = `Totaal Inkoopprijs: € ${currentTotalPurchasePrice.toFixed(2)}`;
+        }
+
+        function saveCustomers() {
+            const customerList = document.getElementById('customerList').innerHTML;
+            localStorage.setItem('customerList', customerList);
+        }
+
+        function loadCustomers() {
+            const savedCustomers = localStorage.getItem('customerList');
+            if (savedCustomers) {
+                document.getElementById('customerList').innerHTML = savedCustomers;
+            }
+        }
+    </script>
+
+</body>
+</html>
